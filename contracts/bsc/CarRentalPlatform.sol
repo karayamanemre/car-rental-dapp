@@ -209,5 +209,40 @@ contract CarRentalPlatform is ReentrancyGuard {
     require(cars[id].id != 0, "Car does not exist");
     return cars[id];
   }
+
+  function getCarsByStatus(Status _status) external view returns(Car[] memory) {
+    uint count = 0;
+    uint length = _counter.current();
+    for(uint i = 1; i <= length; i++) {
+      if(cars[i].status == _status) {
+        count++;
+      }
+    }
+    Car[] memory result = new Car[](count);
+    count = 0;
+    for(uint i = 1; i <= length; i++) {
+      if(cars[i].status == _status) {
+        result[count] = cars[i];
+        count++;
+      }
+    }
+    return result;
+  }
  
+  function calculateDebt(uint timeElapsed, uint rentFee) private pure returns(uint) {
+    uint minutesElapsed = timeElapsed / 60;
+    return minutesElapsed * rentFee;
+  }
+
+  function getCurrentCount() external view returns(uint) {
+    return _counter.current();
+  }
+
+  function getContractBalance() external view onlyOwner returns(uint) {
+    return address(this).balance;
+  }
+
+  function getTotalPayments() external view onlyOwner returns(uint) {
+    return totalPayments;
+  }
 }
