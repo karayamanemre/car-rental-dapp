@@ -23,7 +23,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@truffle/hdwallet-provider": "^1.4.2",
+    "@truffle/hdwallet-provider": "^2.1.12",
     "dotenv": "^9.0.0"
   },
   "dependencies": {
