@@ -2,8 +2,9 @@
 pragma solidity ^0.8.18;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract CarRentalPlatform {
+contract CarRentalPlatform is ReentrancyGuard {
   using Counters for Counters.Counter;
   Counters.Counter private _counter;
   
@@ -162,6 +163,51 @@ contract CarRentalPlatform {
     users[msg.sender].debt = 0;
 
     emit PaymentMade(msg.sender, debt);
+  }
+
+  function withdraw(uint amount) external nonReentrant {
+    require(isUser(msg.sender), "User does not exist");
+
+    uint balance = users[msg.sender].balance;
+    require (balance >= amount, "User does not have enough balance");
+
+    unchecked {
+      users[msg.sender].balance -= amount;
+    }
+
+    (bool success, ) = msg.sender.call{value: amount}("");
+    require(success, "Transfer failed.");
+
+    emit Withdraw(msg.sender, amount);
+  }
+
+  function withdrawOwnerBalance(uint amount) external onlyOwner {
+    require(totalPayments >= amount, "Owner does not have enough balance");
+
+    (bool success, ) = owner.call{value: amount}("");
+    require(success, "Transfer failed.");
+
+    unchecked {
+      totalPayments -= amount;
+    }
+  }
+
+  function getOwner() external view returns(address) {
+    return owner;
+  }
+
+  function isUser(address walletAddress) private view returns(bool) {
+    return users[walletAddress].walletAddress != address(0);
+  }
+
+  function getUser(address walletAddress) external view returns(User memory) {
+    require(isUser(walletAddress), "User does not exist");
+    return users[walletAddress];
+  }
+
+  function getCar(uint id) external view returns(Car memory) {
+    require(cars[id].id != 0, "Car does not exist");
+    return cars[id];
   }
  
 }
