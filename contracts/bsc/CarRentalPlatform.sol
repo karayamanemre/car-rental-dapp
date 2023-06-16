@@ -60,4 +60,42 @@ contract CarRentalPlatform {
     _;
   }
 
+  function setOwner(address _newOwner) public onlyOwner {
+    owner = _newOwner;
+  }
+
+  function addUser(string calldata name, string calldata lastName) external {
+    require(!isUser(msg.sender), "User already exists");
+    users[msg.sender] = User(msg.sender, name, lastName, 0, 0, 0, 0);
+
+    emit UserCreated(msg.sender, users[msg.sender].name, users[msg.sender].lastName);
+  }
+
+  function addCar(string calldata name, string calldata imgUrl, uint rentFee, uint saleFee) external onlyOwner {
+    _counter.increment();
+    uint id = _counter.current();
+    cars[id] = Car(id, name, imgUrl, Status.Available, rentFee, saleFee);
+
+    emit CarCreated(id, cars[id].name, cars[id].imgUrl, cars[id].rentFee, cars[id].saleFee);
+  }
+
+  function updateCarMetaData(uint id, string calldata name, string calldata imgUrl, uint rentFee, uint saleFee) external onlyOwner {
+    require(cars[id].id != 0, "Car does not exist");
+    Car storage car = cars[id];
+    if(bytes(name).length != 0) {
+      car.name = name;
+    }
+    if(bytes(imgUrl).length != 0) {
+      car.imgUrl = imgUrl;
+    }
+    if(rentFee > 0) {
+      car.rentFee = rentFee;
+    }
+    if(saleFee > 0) {
+      car.saleFee = saleFee;
+    }
+
+    emit CarMetaDataUpdated(id, car.name, car.imgUrl, car.rentFee, car.saleFee);
+  }
+
 }
