@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 contract CarRentalPlatform {
   using Counters for Counters.Counter;
   Counters.Counter private _counter;
-
+  
   address private owner;
 
   uint private totalPayments;
@@ -134,6 +134,34 @@ contract CarRentalPlatform {
     cars[rentedCarId].status = Status.Available;
 
     emit CheckIn(msg.sender, rentedCarId);
+  }
+
+  function deposit() external payable {
+    require(isUser(msg.sender), "User does not exist");
+    require(msg.value > 0, "Deposit amount must be greater than 0");
+
+    users[msg.sender].balance += msg.value;
+
+    emit Deposit(msg.sender, msg.value);
+  }
+
+  function makePayment() external {
+    require(isUser(msg.sender), "User does not exist");
+
+    uint debt = users[msg.sender].debt;
+    uint balance = users[msg.sender].balance;
+
+    require(debt > 0, "User does not have a debt");
+    require(balance >= debt, "User does not have enough balance");
+
+    unchecked {
+      users[msg.sender].balance -= debt;
+    }
+
+    totalPayments += debt;
+    users[msg.sender].debt = 0;
+
+    emit PaymentMade(msg.sender, debt);
   }
  
 }
