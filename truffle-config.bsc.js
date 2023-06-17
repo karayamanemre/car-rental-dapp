@@ -33,6 +33,8 @@ module.exports = {
 			confirmations: 10,
 			timeoutBlocks: 200,
 			skipDryRun: true,
+			gas: 5000000,
+			gasPrice: 10000000000,
 		},
 		bscMainnet: {
 			provider: () =>
