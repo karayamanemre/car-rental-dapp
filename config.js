@@ -1,1 +1,1 @@
-export const CarRentalPlatformAddress = "0x966E0b3612529eD6595Def7810055C968680b3a8";
+export const CarRentalPlatformAddress = "0x89658934CbafeAC133A17988a0616e0c13A2827d";

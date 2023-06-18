@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.17;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -61,7 +61,7 @@ contract CarRentalPlatform is ReentrancyGuard {
     _;
   }
 
-  function setOwner(address _newOwner) public onlyOwner {
+  function setOwner(address _newOwner) external onlyOwner {
     owner = _newOwner;
   }
 
@@ -196,7 +196,7 @@ contract CarRentalPlatform is ReentrancyGuard {
     return owner;
   }
 
-  function isUser(address walletAddress) private view returns(bool) {
+  function isUser(address walletAddress) internal view returns(bool) {
     return users[walletAddress].walletAddress != address(0);
   }
 
