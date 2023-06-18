@@ -33,8 +33,6 @@ module.exports = {
 			confirmations: 10,
 			timeoutBlocks: 200,
 			skipDryRun: true,
-			gas: 5000000,
-			gasPrice: 10000000000,
 		},
 		bscMainnet: {
 			provider: () =>
@@ -54,7 +52,7 @@ module.exports = {
 	// Configure your compilers
 	compilers: {
 		solc: {
-			version: "^0.8.17",
+			version: "^0.8.7",
 		},
 	},
 	db: {

@@ -4,7 +4,7 @@ import RenterABI from "./ABI/CarRentalPlatform.json";
 let selectedAccount;
 let renterContract;
 let isInitialized = false;
-let renterContractAddress = "0x89658934CbafeAC133A17988a0616e0c13A2827d";
+let renterContractAddress = "0xBc0a65B278881499C197C775d6DdBCEfb0aD0C0f";
 
 export const init = async () => {
 	// Configure contract
@@ -92,7 +92,7 @@ export const editCarMetadata = async (id, name, imgUrl, rentFee, saleFee) => {
 	}
 	try {
 		let res = await renterContract.methods
-			.updateCarMetaData(id, name, imgUrl, rentFee, saleFee)
+			.editCarMetadata(id, name, imgUrl, rentFee, saleFee)
 			.send({ from: selectedAccount });
 		return res;
 	} catch (e) {
@@ -106,7 +106,7 @@ export const editCarStatus = async (id, status) => {
 	}
 	try {
 		let res = await renterContract.methods
-			.updateCarStatus(id, status)
+			.editCarStatus(id, status)
 			.send({ from: selectedAccount });
 		return res;
 	} catch (e) {
@@ -178,7 +178,7 @@ export const withdrawBalance = async (value) => {
 	let send_value = Web3.utils.toWei(value, "ether");
 	try {
 		let res = await renterContract.methods
-			.withdraw(send_value)
+			.withdrawBalance(send_value)
 			.send({ from: selectedAccount });
 		return res;
 	} catch (e) {
@@ -244,7 +244,7 @@ export const getCarsByStatus = async (status) => {
 		await init();
 	}
 	try {
-		let res = await renterContract.methods.getCarsByStatus(status).call();
+		let res = await renterContract.methods.getCarByStatus(status).call();
 		return res;
 	} catch (e) {
 		console.error(e);

@@ -15,7 +15,7 @@ contract("CarRentalPlatform", (accounts) => {
 		await carRentalPlatform.addUser("John", "Doe", { from: user });
 		const userInfo = await carRentalPlatform.getUser(user);
 		assert.equal(userInfo.name, "John");
-		assert.equal(userInfo.lastName, "Doe");
+		assert.equal(userInfo.lastname, "Doe");
 	});
 
 	it("Should add a new car", async () => {
